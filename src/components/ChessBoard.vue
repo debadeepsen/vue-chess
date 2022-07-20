@@ -53,7 +53,6 @@ export default {
     const allowedMoves = ref([])
     const error = ref('')
     const history = ref([])
-    const gameJSON = ref({})
 
     // private
     let previousSquare = null
@@ -98,7 +97,6 @@ export default {
       board,
       allowedMoves,
       history,
-      gameJSON,
       showOrMove,
       isInAllowedMoves,
       getFormattedMove
