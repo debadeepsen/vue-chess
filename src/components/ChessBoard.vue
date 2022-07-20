@@ -4,13 +4,17 @@
     {{ JSON.stringify(allowedMoves, null, 2) }}
     </pre>
     <div class="chess-board">
-      <div v-for="rank in board" :key="rank.row">
+      <div class="rank-row" v-for="rank in board" :key="rank.row">
         <button
           v-for="box in rank.boxes"
           :key="box.key"
-          :class="'square ' + box.color + (isInAllowedMoves(box.key) ? ' allowed' : '')"
+          :class="
+            'square ' +
+            box.color +
+            (isInAllowedMoves(box.key) ? ' allowed' : '')
+          "
           :data-box="box.key"
-          @click="showMoves(box.key)"
+          @click="showOrMove(box.key)"
           :style="{
             color: box.color === 'light' ? '#222' : '#eee'
           }"
@@ -28,7 +32,7 @@
 <script>
 import { ref } from 'vue'
 import { startFEN } from '@/lib/constants'
-import { initBoard } from '@/lib/lib'
+import { /*hasPiece,*/ initBoard } from '@/lib/lib'
 const jsChessEngine = require('js-chess-engine')
 
 export default {
@@ -40,21 +44,44 @@ export default {
     const board = ref([])
     const allowedMoves = ref([])
 
+    // private
+    let previousSquare = null
+
     // initialization
     initBoard(board, jsChessEngine.status(startFEN))
 
     // methods
-    const showMoves = (fromSquare) => {
-      allowedMoves.value = game.moves(fromSquare)
-      // console.log(allowedMoves)
-    }
-
     const isInAllowedMoves = (square) => allowedMoves.value.includes(square)
+
+    const showOrMove = (selectedSquare) => {
+      console.log({ previousSquare, selectedSquare })
+
+      // if (!hasPiece(game.exportJson(), selectedSquare)) {
+      //   previousSquare = null
+      // }
+
+      if (previousSquare === null) {
+        allowedMoves.value = game.moves(selectedSquare)
+        previousSquare = selectedSquare
+      } else {
+        try {
+          game.move(previousSquare, selectedSquare)
+          const fen = jsChessEngine.getFen(game.exportJson())
+          console.log({ fen })
+          initBoard(board, game.exportJson())
+          previousSquare = null
+          // console.log(game.exportJson())
+        } catch (e) {
+          alert(e.toString())
+          previousSquare = null
+        }
+      }
+    }
 
     return {
       board,
       allowedMoves,
-      showMoves,
+      showOrMove,
       isInAllowedMoves
     }
   }
@@ -67,6 +94,10 @@ export default {
   flex-direction: column-reverse;
   border: 1px solid #444;
   width: fit-content;
+}
+
+.rank-row {
+  margin: 0;
 }
 
 .square {
