@@ -1,0 +1,16 @@
+:root {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 16px;
+}
+
+#app {
+  box-shadow: 1px 1px 3px #3333;
+  width: 80vw;
+  max-width: 1400px;
+  margin: 10px auto;
+  padding: 20px;
+}
+
+pre {
+    font-size: smaller;
+}
