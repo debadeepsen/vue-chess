@@ -4,7 +4,7 @@
 }
 
 #app {
-  box-shadow: 1px 1px 3px #3333;
+  box-shadow: 1px 1px 3px #2223;
   width: 80vw;
   max-width: 1400px;
   margin: 10px auto;
@@ -13,4 +13,14 @@
 
 pre {
     font-size: smaller;
+}
+
+@media screen and (prefers-color-scheme: dark) {
+    body {
+        background-color: #222;
+        color: #eee;
+    }
+    #app {
+        background-color: #333;
+    }
 }

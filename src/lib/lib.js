@@ -13,9 +13,10 @@ export const initBoard = (board, initConfig) => {
       const boxKey = files[i] + rank.row
       let boxPiece = initConfig.pieces[boxKey]
       if (boxPiece && boxPiece.toLowerCase() === boxPiece) boxPiece = `_${boxPiece.toUpperCase()}`
-      console.log({ initConfig, boxPiece })
+    //   console.log({ initConfig, boxPiece })
       rank.boxes.push({
         file: files[i],
+        key: boxKey,
         color: (i + rank.row) % 2 === 0 ? 'dark' : 'light',
         piece: boxPiece
       })
