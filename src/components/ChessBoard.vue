@@ -29,8 +29,8 @@
     </div>
     <div>
       <ul>
-        <li v-for="(h,i) in history" :key="i">
-          {{ h.configuration.turn }}: {{ h.configuration.pieces[h.from] + h.to.toLowerCase() }}
+        <li v-for="(h, i) in history" :key="i">
+          {{ h.configuration.turn }}: {{ getFormattedMove(h) }}
         </li>
       </ul>
     </div>
@@ -40,7 +40,7 @@
 <script>
 import { ref } from 'vue'
 import { startFEN } from '@/lib/constants'
-import { /*hasPiece,*/ initBoard } from '@/lib/lib'
+import { /*hasPiece,*/ initBoard, getFormattedMove } from '@/lib/lib'
 const jsChessEngine = require('js-chess-engine')
 
 export default {
@@ -53,6 +53,7 @@ export default {
     const allowedMoves = ref([])
     const error = ref('')
     const history = ref([])
+    const gameJSON = ref({})
 
     // private
     let previousSquare = null
@@ -64,7 +65,7 @@ export default {
     const isInAllowedMoves = (square) => allowedMoves.value.includes(square)
 
     const showOrMove = (selectedSquare) => {
-      console.log({ previousSquare, selectedSquare })
+      // console.log({ previousSquare, selectedSquare })
 
       error.value = ''
 
@@ -79,7 +80,10 @@ export default {
         try {
           game.move(previousSquare, selectedSquare)
           history.value = game.getHistory()
-          console.log(history.value)
+          history.value[history.value.length - 1].check =
+            game.exportJson().check
+          history.value[history.value.length - 1].checkMate =
+            game.exportJson().checkMate
           initBoard(board, game.exportJson())
           previousSquare = null
         } catch (e) {
@@ -94,8 +98,10 @@ export default {
       board,
       allowedMoves,
       history,
+      gameJSON,
       showOrMove,
-      isInAllowedMoves
+      isInAllowedMoves,
+      getFormattedMove
     }
   }
 }

@@ -34,4 +34,14 @@ export const initBoard = (board, initConfig) => {
 
 export const hasPiece = (gameJSON, boxKey) =>
   Object.keys(gameJSON.pieces).includes(boxKey)
-  
+
+export const getFormattedMove = (historyMove) => {
+  console.log({ historyMove })
+  const pieceMoved = historyMove.configuration.pieces[historyMove.from]
+  const prefix =
+    pieceMoved.toLowerCase() === 'p' ? '' : pieceMoved.toUpperCase()
+  const to = historyMove.to.toLowerCase()
+  const suffix = historyMove.checkMate ? '#' : historyMove.check ? '+' : ''
+
+  return prefix + to + suffix
+}
