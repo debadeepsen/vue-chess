@@ -3,6 +3,7 @@
     <pre v-if="false">
     {{ JSON.stringify(allowedMoves, null, 2) }}
     </pre>
+    <div class="error">{{ error }}</div>
     <div class="chess-board">
       <div class="rank-row" v-for="rank in board" :key="rank.row">
         <button
@@ -26,6 +27,13 @@
         </button>
       </div>
     </div>
+    <div>
+      <ul>
+        <li v-for="(h,i) in history" :key="i">
+          {{ h.configuration.turn }}: {{ h.configuration.pieces[h.from] + h.to.toLowerCase() }}
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -43,6 +51,8 @@ export default {
     // state
     const board = ref([])
     const allowedMoves = ref([])
+    const error = ref('')
+    const history = ref([])
 
     // private
     let previousSquare = null
@@ -56,6 +66,8 @@ export default {
     const showOrMove = (selectedSquare) => {
       console.log({ previousSquare, selectedSquare })
 
+      error.value = ''
+
       // if (!hasPiece(game.exportJson(), selectedSquare)) {
       //   previousSquare = null
       // }
@@ -66,21 +78,22 @@ export default {
       } else {
         try {
           game.move(previousSquare, selectedSquare)
-          const fen = jsChessEngine.getFen(game.exportJson())
-          console.log({ fen })
+          history.value = game.getHistory()
+          console.log(history.value)
           initBoard(board, game.exportJson())
           previousSquare = null
-          // console.log(game.exportJson())
         } catch (e) {
-          alert(e.toString())
+          error.value = e.toString()
           previousSquare = null
         }
       }
     }
 
     return {
+      error,
       board,
       allowedMoves,
+      history,
       showOrMove,
       isInAllowedMoves
     }
@@ -89,6 +102,15 @@ export default {
 </script>
 
 <style scoped>
+.error {
+  opacity: 1;
+}
+
+.fading {
+  opacity: 0;
+  transition: opacity 5s;
+}
+
 .chess-board {
   display: flex;
   flex-direction: column-reverse;

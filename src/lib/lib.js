@@ -34,3 +34,4 @@ export const initBoard = (board, initConfig) => {
 
 export const hasPiece = (gameJSON, boxKey) =>
   Object.keys(gameJSON.pieces).includes(boxKey)
+  
