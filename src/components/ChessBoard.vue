@@ -1,5 +1,6 @@
 <template>
   <div>
+    {{ store.state.playerMode }}
     <div class="chess-board">
       <div class="rank-row" v-for="rank in board" :key="rank.row">
         <button
@@ -34,7 +35,7 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { startFEN } from '@/lib/constants'
 import { /*hasPiece,*/ initBoard, getFormattedMove } from '@/lib/lib'
 import { useStore } from 'vuex'
@@ -51,6 +52,7 @@ export default {
     const allowedMoves = ref([])
     const error = ref('')
     const history = ref([])
+    const mode = computed(() => store.state.playerMode)
 
     // private
     let previousSquare = null
@@ -61,26 +63,28 @@ export default {
     // methods
     const isInAllowedMoves = (square) => allowedMoves.value.includes(square)
 
+    const updateHistoryAndBoard = () => {
+      history.value = game.getHistory()
+      history.value[history.value.length - 1].check = game.exportJson().check
+      history.value[history.value.length - 1].checkMate =
+        game.exportJson().checkMate
+      initBoard(board, game.exportJson())
+      previousSquare = null
+    }
+
     const showOrMove = (selectedSquare) => {
-      // console.log({ previousSquare, selectedSquare })
-
-      // if (!hasPiece(game.exportJson(), selectedSquare)) {
-      //   previousSquare = null
-      // }
-
       if (previousSquare === null) {
         allowedMoves.value = game.moves(selectedSquare)
         previousSquare = selectedSquare
       } else {
         try {
           game.move(previousSquare, selectedSquare)
-          history.value = game.getHistory()
-          history.value[history.value.length - 1].check =
-            game.exportJson().check
-          history.value[history.value.length - 1].checkMate =
-            game.exportJson().checkMate
-          initBoard(board, game.exportJson())
-          previousSquare = null
+          updateHistoryAndBoard()
+
+          if (mode.value === 'AI') {
+            game.aiMove()
+            updateHistoryAndBoard()
+          }
         } catch (e) {
           store.commit('setError', e.toString().substr(7))
           allowedMoves.value = []
@@ -90,6 +94,7 @@ export default {
     }
 
     return {
+      store,
       error,
       board,
       allowedMoves,

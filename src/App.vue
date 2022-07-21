@@ -2,6 +2,7 @@
   <div>
     <div class="error" v-show="storedError">{{ storedError }}</div>
     <main>
+      <player-switcher></player-switcher>
       <chess-board></chess-board>
     </main>
   </div>
@@ -11,11 +12,13 @@
 import { computed, watch } from '@vue/runtime-core'
 import { useStore } from 'vuex'
 import ChessBoard from './components/ChessBoard'
+import PlayerSwitcher from './components/PlayerSwitcher.vue'
 export default {
   name: 'App',
 
   components: {
-    ChessBoard
+    ChessBoard,
+    PlayerSwitcher
   },
 
   setup() {

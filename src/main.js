@@ -1,23 +1,10 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import { createStore } from 'vuex'
+import store from './store'
 
 // Create a new store instance.
-const store = createStore({
-  state () {
-    return {
-      error: null
-    }
-  },
-  mutations: {
-    setError (state, message) {
-      state.error = message
-    }
-  }
-})
-
+const _store = createStore(store)
 const app = createApp(App)
-
-app.use(store)
-
+app.use(_store)
 app.mount('#app')
