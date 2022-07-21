@@ -174,10 +174,11 @@ export default {
   width: 240px;
   display: grid;
   grid-template-columns: auto auto;
+  height: fit-content;
 }
 
 .game-history > div {
-  /* width: 110px; */
-  border: 1px solid;
+  padding: 10px;
+  border: 1px solid #888;
 }
 </style>
