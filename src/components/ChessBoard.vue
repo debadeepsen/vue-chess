@@ -1,9 +1,5 @@
 <template>
   <div>
-    <pre v-if="false">
-    {{ JSON.stringify(allowedMoves, null, 2) }}
-    </pre>
-    <div class="error">{{ error }}</div>
     <div class="chess-board">
       <div class="rank-row" v-for="rank in board" :key="rank.row">
         <button
@@ -41,10 +37,12 @@
 import { ref } from 'vue'
 import { startFEN } from '@/lib/constants'
 import { /*hasPiece,*/ initBoard, getFormattedMove } from '@/lib/lib'
+import { useStore } from 'vuex'
 const jsChessEngine = require('js-chess-engine')
 
 export default {
   setup() {
+    const store = useStore()
     const game = new jsChessEngine.Game()
     game.moves()
 
@@ -66,8 +64,6 @@ export default {
     const showOrMove = (selectedSquare) => {
       // console.log({ previousSquare, selectedSquare })
 
-      error.value = ''
-
       // if (!hasPiece(game.exportJson(), selectedSquare)) {
       //   previousSquare = null
       // }
@@ -86,7 +82,8 @@ export default {
           initBoard(board, game.exportJson())
           previousSquare = null
         } catch (e) {
-          error.value = e.toString()
+          store.commit('setError', e.toString().substr(7))
+          allowedMoves.value = []
           previousSquare = null
         }
       }
@@ -133,13 +130,28 @@ export default {
   position: relative;
 }
 
+.square:hover {
+  transition: all 0.15s;
+  cursor: pointer;
+  transform: scale(1.1);
+  z-index: 3;
+  box-shadow: 0px 0px 5px #1115;
+}
+
 .square::before {
   content: attr(data-box);
   position: absolute;
-  left: 4px;
-  top: 4px;
-  font-size: 0.6rem;
+  left: 2px;
+  top: 2px;
+  font-size: 0.5rem;
   font-weight: 600;
+}
+
+.square img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
 }
 
 .allowed {

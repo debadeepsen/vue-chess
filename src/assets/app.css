@@ -3,7 +3,7 @@
   font-size: 16px;
 }
 
-#app {
+#app main {
   box-shadow: 1px 1px 3px #2223;
   width: 80vw;
   max-width: 1400px;
@@ -11,16 +11,32 @@
   padding: 20px;
 }
 
+.error {
+  position: absolute;
+  top: 30px;
+  z-index: 5;
+  padding: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 1px solid #444;
+  background-color: #ddde;
+  box-shadow: 1px 1px 5px #4442;
+}
+
 pre {
-    font-size: smaller;
+  font-size: smaller;
 }
 
 @media screen and (prefers-color-scheme: dark) {
-    body {
-        background-color: #222;
-        color: #eee;
-    }
-    #app {
-        background-color: #333;
-    }
+  body {
+    background-color: #222;
+    color: #eee;
+  }
+  #app main {
+    background-color: #333;
+  }
+  .error {
+    border: 1px solid #111;
+    background-color: #444e;
+    box-shadow: 1px 1px 5px #2222;}
 }
