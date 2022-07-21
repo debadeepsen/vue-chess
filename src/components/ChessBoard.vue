@@ -1,6 +1,5 @@
 <template>
-  <div>
-    {{ store.state.playerMode }}
+  <div class="f-row">
     <div class="chess-board">
       <div class="rank-row" v-for="rank in board" :key="rank.row">
         <button
@@ -24,12 +23,10 @@
         </button>
       </div>
     </div>
-    <div>
-      <ul>
-        <li v-for="(h, i) in history" :key="i">
-          {{ h.configuration.turn }}: {{ getFormattedMove(h) }}
-        </li>
-      </ul>
+    <div class="game-history">
+      <div v-for="(h, i) in history" :key="i">
+        {{ h.configuration.turn }}: {{ getFormattedMove(h) }}
+      </div>
     </div>
   </div>
 </template>
@@ -70,6 +67,7 @@ export default {
         game.exportJson().checkMate
       initBoard(board, game.exportJson())
       previousSquare = null
+      allowedMoves.value = []
     }
 
     const showOrMove = (selectedSquare) => {
@@ -170,5 +168,16 @@ export default {
 
 .dark {
   background: saddlebrown;
+}
+
+.game-history {
+  width: 240px;
+  display: grid;
+  grid-template-columns: auto auto;
+}
+
+.game-history > div {
+  /* width: 110px; */
+  border: 1px solid;
 }
 </style>

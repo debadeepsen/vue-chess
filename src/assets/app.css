@@ -27,6 +27,19 @@ pre {
   font-size: smaller;
 }
 
+.f-row {
+  display: flex;
+    /* margin-left: 20px; */
+    flex-direction: row;
+}
+
+@media screen and(max-width: 640px) {
+  .f-row {
+    /* margin-left: 0px; */
+    flex-direction: column;
+  }
+}
+
 @media screen and (prefers-color-scheme: dark) {
   body {
     background-color: #222;
@@ -38,5 +51,6 @@ pre {
   .error {
     border: 1px solid #111;
     background-color: #444e;
-    box-shadow: 1px 1px 5px #2222;}
+    box-shadow: 1px 1px 5px #2222;
+  }
 }
