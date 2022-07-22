@@ -1,27 +1,23 @@
 <template>
-  <div class="f-row">
-    <div class="chess-board">
-      <div class="rank-row" v-for="rank in board" :key="rank.row">
-        <button
-          v-for="box in rank.boxes"
-          :key="box.key"
-          :class="
-            'square ' +
-            box.color +
-            (isInAllowedMoves(box.key) ? ' allowed' : '')
-          "
-          :data-box="box.key"
-          @click="showOrMove(box.key)"
-          :style="{
-            color: box.color === 'light' ? '#222' : '#eee'
-          }"
-        >
-          <img
-            v-show="box.piece"
-            :src="box.piece ? require(`../assets/pieces/${box.piece}.svg`) : ''"
-          />
-        </button>
-      </div>
+  <div class="chess-board">
+    <div class="rank-row" v-for="rank in board" :key="rank.row">
+      <button
+        v-for="box in rank.boxes"
+        :key="box.key"
+        :class="
+          'square ' + box.color + (isInAllowedMoves(box.key) ? ' allowed' : '')
+        "
+        :data-box="box.key"
+        @click="showOrMove(box.key)"
+        :style="{
+          color: box.color === 'light' ? '#222' : '#eee'
+        }"
+      >
+        <img
+          v-show="box.piece"
+          :src="box.piece ? require(`../assets/pieces/${box.piece}.svg`) : ''"
+        />
+      </button>
     </div>
   </div>
 </template>
@@ -29,7 +25,11 @@
 <script>
 import { computed, ref } from 'vue'
 import { startFEN } from '@/lib/constants'
-import { /*hasPiece,*/ initBoard, getFormattedMove, getLastMove } from '@/lib/lib'
+import {
+  /*hasPiece,*/ initBoard,
+  getFormattedMove,
+  getLastMove
+} from '@/lib/lib'
 import { useStore } from 'vuex'
 const jsChessEngine = require('js-chess-engine')
 
@@ -115,6 +115,7 @@ export default {
   flex-direction: column-reverse;
   border: 1px solid #444;
   width: fit-content;
+  min-width: 480px;
 }
 
 .rank-row {
