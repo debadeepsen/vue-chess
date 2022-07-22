@@ -87,6 +87,14 @@ export default {
       allowedMoves.value = []
     }
 
+    const makeAImoveifNeeded = () => {
+      if (!mode.value.includes('_')) return
+
+      const level = Number(mode.value.split('_')[1])
+      game.value.aiMove(level)
+      updateHistoryAndBoard()
+    }
+
     const showOrMove = (selectedSquare) => {
       if (previousSquare === null) {
         allowedMoves.value = game.value.moves(selectedSquare)
@@ -95,11 +103,7 @@ export default {
         try {
           game.value.move(previousSquare, selectedSquare)
           updateHistoryAndBoard()
-
-          if (mode.value === 'AI') {
-            game.value.aiMove()
-            updateHistoryAndBoard()
-          }
+          makeAImoveifNeeded()
         } catch (e) {
           store.commit('setError', e.toString().substr(7))
           allowedMoves.value = []

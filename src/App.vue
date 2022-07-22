@@ -9,11 +9,12 @@
         <history-panel />
       </div>
     </main>
+    <hr />
   </div>
 </template>
 
 <script>
-import { computed, watch } from '@vue/runtime-core'
+import { computed, watch, ref } from 'vue'
 import { useStore } from 'vuex'
 const jsChessEngine = require('js-chess-engine')
 import ChessBoard from './components/ChessBoard'
@@ -33,6 +34,7 @@ export default {
 
     const store = useStore()
     const storedError = computed(() => store.state.error)
+    const showModeOptionsDialog = ref(false)
 
     watch(storedError, (value) => {
       if (value) {
@@ -52,7 +54,8 @@ export default {
 
     return {
       storedError,
-      startNewGame
+      startNewGame,
+      showModeOptionsDialog
     }
   }
 }

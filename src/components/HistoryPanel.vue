@@ -97,13 +97,13 @@ export default {
     text-align: center;
     /* padding: 6px; */
     padding: 4px 0;
-    font-size: 14px;
+    font-size: 12px;
     min-width: 100px;
     height: 20px;
   }
 
   th {
-    border-bottom: 1px solid #8888;
+    border-bottom: 1px solid #8883;
   }
 
   th:nth-child(1),

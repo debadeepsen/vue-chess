@@ -18,8 +18,8 @@ body {
   box-shadow:  5px 5px 40px #b0b0b088,
                -5px -5px 40px #f7f7f7;
 
-  transform: scale(1.4);
-  margin-top: 170px;
+  /* transform: scale(1.4);
+  margin-top: 170px; */
 }
 
 .error {
