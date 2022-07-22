@@ -33,12 +33,12 @@ export default {
   setup() {
     const store = useStore()
     const historyRows = computed(() => {
-      const { gameHistory } = store.state
+      const history = computed(() => store.state.gameHistory)
 
       const rows = []
-      for (let i = 0; i < gameHistory.length; i += 2) {
-        let whiteMove = gameHistory[i]
-        let blackMove = gameHistory[i + 1]
+      for (let i = 0; i < history.value.length; i += 2) {
+        let whiteMove = history.value[i]
+        let blackMove = history.value[i + 1]
         rows.push({
           rowNum: i / 2 + 1,
           white: getFormattedMove(whiteMove),

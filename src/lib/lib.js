@@ -54,3 +54,10 @@ export const getLastMove = (history, gameJSON) => {
   return lastMove
 }
 
+export const inverseObject = (obj) => {
+  var retobj = {}
+  for (const key in obj) {
+    retobj[obj[key]] = key
+  }
+  return retobj
+}

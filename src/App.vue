@@ -2,7 +2,7 @@
   <div>
     <div class="error" v-show="storedError">{{ storedError }}</div>
     <main>
-      <button class="new-game">New Game</button>
+      <button class="new-game" @click="startNewGame">New Game</button>
       <player-switcher />
       <div class="f-row">
         <chess-board />
@@ -15,9 +15,10 @@
 <script>
 import { computed, watch } from '@vue/runtime-core'
 import { useStore } from 'vuex'
+const jsChessEngine = require('js-chess-engine')
 import ChessBoard from './components/ChessBoard'
-import PlayerSwitcher from './components/PlayerSwitcher.vue'
-import HistoryPanel from './components/HistoryPanel.vue'
+import PlayerSwitcher from './components/PlayerSwitcher'
+import HistoryPanel from './components/HistoryPanel'
 export default {
   name: 'App',
 
@@ -28,6 +29,8 @@ export default {
   },
 
   setup() {
+    document.title = 'Chess'
+
     const store = useStore()
     const storedError = computed(() => store.state.error)
 
@@ -39,8 +42,17 @@ export default {
       }
     })
 
+    let game = new jsChessEngine.Game()
+    store.commit('setGame', game)
+
+    const startNewGame = () => {
+      game = new jsChessEngine.Game()
+      store.commit('setGame', game)
+    }
+
     return {
-      storedError
+      storedError,
+      startNewGame
     }
   }
 }

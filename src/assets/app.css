@@ -3,13 +3,23 @@
   font-size: 16px;
 }
 
+body {
+  background-color: #eee;
+}
+
 #app main {
-  box-shadow: 1px 1px 3px #2223;
+  background-color: #fff;
   width: fit-content;
   max-width: 1400px;
   margin: 10px auto;
   padding: 20px;
   position: relative;
+  border-radius: 5px;
+  box-shadow:  5px 5px 40px #b0b0b088,
+               -5px -5px 40px #f7f7f7;
+
+  transform: scale(1.4);
+  margin-top: 170px;
 }
 
 .error {
@@ -19,7 +29,7 @@
   padding: 20px;
   left: 50%;
   transform: translateX(-50%);
-  border: 1px solid #444;
+  /* border: 1px solid #444; */
   background-color: #ddde;
   box-shadow: 1px 1px 5px #4442;
 }
@@ -55,6 +65,8 @@ button:hover {
   }
   #app main {
     background-color: #333;
+    border-radius: 5px;
+    box-shadow: 5px 5px 40px #222222, -5px -5px 40px #1b1b1b;
   }
   .error {
     border: 1px solid #111;
@@ -67,6 +79,7 @@ button:hover {
   position: absolute;
   top: 4px;
   right: 4px;
+  border-radius: 5px;
 }
 
 .f-row {

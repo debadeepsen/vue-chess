@@ -5,7 +5,11 @@
         v-for="box in rank.boxes"
         :key="box.key"
         :class="
-          'square ' + box.color + (isInAllowedMoves(box.key) ? ' allowed' : '')
+          'square ' +
+          box.color +
+          (isInAllowedMoves(box.key) ? ' allowed' : '') +
+          (box.key === check.square ? ' checked' : '') +
+          (box.key === check.square && check.mate ? ' checkmated' : '')
         "
         :data-box="box.key"
         @click="showOrMove(box.key)"
@@ -23,12 +27,13 @@
 </template>
 
 <script>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { startFEN } from '@/lib/constants'
 import {
   /*hasPiece,*/ initBoard,
   getFormattedMove,
-  getLastMove
+  getLastMove,
+  inverseObject
 } from '@/lib/lib'
 import { useStore } from 'vuex'
 const jsChessEngine = require('js-chess-engine')
@@ -36,12 +41,15 @@ const jsChessEngine = require('js-chess-engine')
 export default {
   setup() {
     const store = useStore()
-    const game = new jsChessEngine.Game()
-    game.moves()
+    const game = computed(() => store.state.game)
 
     // state
     const board = ref([])
     const allowedMoves = ref([])
+    const check = ref({
+      square: null,
+      mate: false
+    })
     const error = ref('')
     const mode = computed(() => store.state.playerMode)
 
@@ -51,31 +59,45 @@ export default {
     // initialization
     initBoard(board, jsChessEngine.status(startFEN))
 
+    // watchers
+    watch(game, () => {
+      initBoard(board, jsChessEngine.status(startFEN))
+      store.state.gameHistory.length = 0
+    })
+
     // methods
     const isInAllowedMoves = (square) => allowedMoves.value.includes(square)
 
     const updateHistoryAndBoard = () => {
-      const history = game.getHistory()
-      const gameJSON = game.exportJson()
+      const history = game.value.getHistory()
+      const gameJSON = game.value.exportJson()
       const lastMove = getLastMove(history, gameJSON)
       store.state.gameHistory.push(lastMove)
 
-      initBoard(board, game.exportJson())
+      console.log({ gameJSON })
+
+      const kingPiece = gameJSON.turn === 'white' ? 'K' : 'k'
+      const invertedPieceMap = inverseObject(gameJSON.pieces)
+      const kingSquare = invertedPieceMap[kingPiece]
+      check.value.square = gameJSON.check ? kingSquare : null
+      check.value.mate = gameJSON.checkMate
+
+      initBoard(board, game.value.exportJson())
       previousSquare = null
       allowedMoves.value = []
     }
 
     const showOrMove = (selectedSquare) => {
       if (previousSquare === null) {
-        allowedMoves.value = game.moves(selectedSquare)
+        allowedMoves.value = game.value.moves(selectedSquare)
         previousSquare = selectedSquare
       } else {
         try {
-          game.move(previousSquare, selectedSquare)
+          game.value.move(previousSquare, selectedSquare)
           updateHistoryAndBoard()
 
           if (mode.value === 'AI') {
-            game.aiMove()
+            game.value.aiMove()
             updateHistoryAndBoard()
           }
         } catch (e) {
@@ -91,6 +113,7 @@ export default {
       error,
       board,
       allowedMoves,
+      check,
       history,
       showOrMove,
       isInAllowedMoves,
@@ -156,6 +179,16 @@ export default {
 
 .allowed {
   box-shadow: inset 0px 0px 0px 30px #0f04;
+  /* transition: all 0.2s; */
+}
+
+.checked {
+  box-shadow: inset 0px 0px 8px 6px #ffbb00;
+  /* transition: all 0.2s; */
+}
+
+.checkmated {
+  box-shadow: inset 0px 0px 8px 6px #c91e00;
   /* transition: all 0.2s; */
 }
 
