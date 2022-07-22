@@ -45,3 +45,12 @@ export const getFormattedMove = (historyMove) => {
 
   return prefix + to + suffix
 }
+
+export const getLastMove = (history, gameJSON) => {
+  const lastMove = history[history.length - 1]
+  lastMove.check = gameJSON.check
+  lastMove.checkMate = gameJSON.checkMate
+
+  return lastMove
+}
+

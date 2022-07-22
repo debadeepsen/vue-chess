@@ -23,18 +23,13 @@
         </button>
       </div>
     </div>
-    <div class="game-history">
-      <div v-for="(h, i) in history" :key="i">
-        {{ h.configuration.turn }}: {{ getFormattedMove(h) }}
-      </div>
-    </div>
   </div>
 </template>
 
 <script>
 import { computed, ref } from 'vue'
 import { startFEN } from '@/lib/constants'
-import { /*hasPiece,*/ initBoard, getFormattedMove } from '@/lib/lib'
+import { /*hasPiece,*/ initBoard, getFormattedMove, getLastMove } from '@/lib/lib'
 import { useStore } from 'vuex'
 const jsChessEngine = require('js-chess-engine')
 
@@ -48,7 +43,6 @@ export default {
     const board = ref([])
     const allowedMoves = ref([])
     const error = ref('')
-    const history = ref([])
     const mode = computed(() => store.state.playerMode)
 
     // private
@@ -61,10 +55,11 @@ export default {
     const isInAllowedMoves = (square) => allowedMoves.value.includes(square)
 
     const updateHistoryAndBoard = () => {
-      history.value = game.getHistory()
-      history.value[history.value.length - 1].check = game.exportJson().check
-      history.value[history.value.length - 1].checkMate =
-        game.exportJson().checkMate
+      const history = game.getHistory()
+      const gameJSON = game.exportJson()
+      const lastMove = getLastMove(history, gameJSON)
+      store.state.gameHistory.push(lastMove)
+
       initBoard(board, game.exportJson())
       previousSquare = null
       allowedMoves.value = []

@@ -9,11 +9,15 @@
 
 <script>
 import { getFormattedMove } from '@/lib/lib'
+import { useStore } from 'vuex'
+import { computed } from 'vue'
 export default {
-  props: ['gameHistory'],
   setup() {
+    const store = useStore()
+    const gameHistory = computed(() => store.state.gameHistory)
     return {
-      getFormattedMove
+      getFormattedMove,
+      gameHistory
     }
   }
 }
