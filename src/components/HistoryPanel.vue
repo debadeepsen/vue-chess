@@ -70,11 +70,12 @@ export default {
 .panel {
   padding: 0px;
   width: 100vw;
+  box-shadow: 0px 0px 6px #1114;
 }
 
 @media screen and (min-width: 640px) {
   .panel {
-    margin-left: 30px;
+    margin-left: 20px;
     width: fit-content;
     height: 480px;
     overflow-x: hidden;
@@ -85,20 +86,24 @@ export default {
     border-collapse: collapse;
   }
 
-  thead tr {
+  /* thead tr {
     position: sticky;
     top: 0;
-  }
+  } */
 
   th,
   td {
-    border: 1px solid #8888;
+    /* border-bottom: 1px solid #8888; */
     text-align: center;
     /* padding: 6px; */
-    padding: 2px 0;
+    padding: 4px 0;
     font-size: 14px;
     min-width: 100px;
     height: 20px;
+  }
+
+  th {
+    border-bottom: 1px solid #8888;
   }
 
   th:nth-child(1),
@@ -107,7 +112,7 @@ export default {
   }
 
   tbody tr:nth-child(2n) {
-    background: #eee2;
+    background: #8881;
   }
 }
 </style>

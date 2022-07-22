@@ -2,6 +2,7 @@
   <div>
     <div class="error" v-show="storedError">{{ storedError }}</div>
     <main>
+      <button class="new-game">New Game</button>
       <player-switcher />
       <div class="f-row">
         <chess-board />

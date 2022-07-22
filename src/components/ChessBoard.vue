@@ -113,7 +113,8 @@ export default {
 .chess-board {
   display: flex;
   flex-direction: column-reverse;
-  border: 1px solid #444;
+  box-shadow: 0px 0px 6px #1114;
+  /* border: 1px solid #444; */
   width: fit-content;
   min-width: 480px;
 }
@@ -159,11 +160,11 @@ export default {
 }
 
 .light {
-  background: tan;
+  background: #c4c4c4;
 }
 
 .dark {
-  background: saddlebrown;
+  background: #6d655e;
 }
 
 .game-history {
